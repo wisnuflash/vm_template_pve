@@ -16,6 +16,8 @@ fi
 #    exit
 # fi
 
+apt install libguestfs-tools
+
 FILE2=/root/jammy-server-cloudimg-amd64.img.original
 if test -f "$FILE2"; then
      echo "found img file skipping download..."
@@ -26,16 +28,22 @@ else
      wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
 fi
 
-virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent
-virt-customize -a jammy-server-cloudimg-amd64.img --run-command "useradd -m -s /bin/bash ubuntu"
-virt-customize -a jammy-server-cloudimg-amd64.img --root-password password:ubuntu
+qemu-img resize jammy-server-clouding-amd64.img
+
+virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent --truncate /etc/machine-id
+#virt-customize -a jammy-server-cloudimg-amd64.img --run-command "useradd -m -s /bin/bash ubuntu"
+#virt-customize -a jammy-server-cloudimg-amd64.img --root-password password:ubuntu
 # virt-customize -a jammy-server-cloudimg-amd64.img --ssh-inject ubuntu:file:/root/ansible_ssh_key.txt
-qm create 9000 --memory 2048 --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci
-qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.img
-qm set 9000 --ide2 local-lvm:cloudinit
-qm set 9000 --boot order=scsi0
+qm create 9000 --name ubuntu-jammy --core 1 --memory 2048 --net0 virtio,bridge=vmbr0 
+#qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.img
+qm disk import 9000 jammy-server-clouding-amd64.img poolcluster
+qm set 9000 --scsihw virtio-scsi-pci --scsi0 poolcluster:vm-9000-disk-0
+qm set 9000 --boot c --bootdisk scsi0
+#qm set 9000 --ide2 local-lvm:cloudinit
+#qm set 9000 --boot order=scsi0
 qm set 9000 --serial0 socket --vga serial0
 qm set 9000 -agent 1
+qm set 9000 --hotplug network,usb,disk
 qm template 9000
 
 echo "cerate_vm_9000 completed."
