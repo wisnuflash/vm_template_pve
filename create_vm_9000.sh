@@ -34,10 +34,10 @@ virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent --t
 #virt-customize -a jammy-server-cloudimg-amd64.img --run-command "useradd -m -s /bin/bash ubuntu"
 #virt-customize -a jammy-server-cloudimg-amd64.img --root-password password:ubuntu
 # virt-customize -a jammy-server-cloudimg-amd64.img --ssh-inject ubuntu:file:/root/ansible_ssh_key.txt
-qm create 9000 --name ubuntu-jammy --core 1 --memory 2048 --net0 virtio,bridge=vmbr0 
-#qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.img
-qm disk import 9000 jammy-server-cloudimg-amd64.img local-lvm
-qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
+qm create 9000 --name ubuntu-jammy --core 1 --memory 2048 --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci
+qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.img
+#qm disk import 9000 jammy-server-cloudimg-amd64.img local-lvm
+#qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
 qm set 9000 --boot c --bootdisk scsi0
 #qm set 9000 --ide2 local-lvm:cloudinit
 #qm set 9000 --boot order=scsi0
