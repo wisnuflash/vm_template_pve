@@ -37,7 +37,7 @@ virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent --t
 qm create 9000 --name ubuntu-jammy --core 1 --memory 2048 --net0 virtio,bridge=vmbr0 
 #qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.img
 qm disk import 9000 jammy-server-clouding-amd64.img poolcluster
-qm set 9000 --scsihw virtio-scsi-pci --scsi0 poolcluster:vm-9000-disk-0
+qm set 9000 --scsihw virtio-scsi-pci --scsi0 poolcluster:0
 qm set 9000 --boot c --bootdisk scsi0
 #qm set 9000 --ide2 local-lvm:cloudinit
 #qm set 9000 --boot order=scsi0
