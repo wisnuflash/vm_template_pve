@@ -28,7 +28,7 @@ else
      wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
 fi
 
-qemu-img resize jammy-server-cloudimg-amd64.img
+qemu-img resize jammy-server-cloudimg-amd64.img 24G
 
 virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent --truncate /etc/machine-id
 #virt-customize -a jammy-server-cloudimg-amd64.img --run-command "useradd -m -s /bin/bash ubuntu"
