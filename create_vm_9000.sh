@@ -39,7 +39,7 @@ qm set 9000 --scsi0 local-lvm:0,import-from=/root/jammy-server-cloudimg-amd64.im
 #qm disk import 9000 jammy-server-cloudimg-amd64.img local-lvm
 #qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
 qm set 9000 --boot c --bootdisk scsi0
-#qm set 9000 --ide2 local-lvm:cloudinit
+qm set 9000 --ide2 local-lvm:cloudinit
 #qm set 9000 --boot order=scsi0
 qm set 9000 --serial0 socket --vga serial0
 qm set 9000 -agent 1
